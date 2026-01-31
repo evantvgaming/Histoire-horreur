@@ -98,7 +98,7 @@ function render(t, c) {
 
 function generateStory() {
   const heroInput = document.getElementById("hero").value.trim();
-  const hero = heroInput || pick(["Evan","Noa","Lina","Sam","Alex","Mika"]);
+  const hero = heroInput || pick(["Jack","Louise","George","Sam","Raphael","Mika"]);
 
   const ctx = {
     hero,
