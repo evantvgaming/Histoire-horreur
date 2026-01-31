@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Horror Generator</title>
+  <style>
+    :root{
+      --bg:#050507; --fg:#eaeaea; --mut:#a0a0aa; --line:#1b1b22; --red:#ff2e2e;
+    }
+    body{
+      margin:0;
+      background:
+        radial-gradient(1000px 600px at 25% 10%, #141428 0%, var(--bg) 70%),
+        radial-gradient(900px 520px at 85% 70%, #0b0b12 0%, var(--bg) 62%);
+      color:var(--fg);
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      cursor: crosshair;
+      overflow-x:hidden;
+      max-width: 980px;
+      margin: 18px auto;
+      padding: 0 16px 28px;
+    }
+    body::before{
+      content:"";
+      position:fixed; inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.2'/%3E%3C/svg%3E");
+      opacity:.10; pointer-events:none; mix-blend-mode:overlay;
+      animation: drift 10s infinite linear;
+    }
+    @keyframes drift{ from{transform:translate(0,0);} to{transform:translate(30px,-18px);} }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background: rgba(10,10,14,.70);
+      box-shadow:0 18px 70px rgba(0,0,0,.68);
+      backdrop-filter: blur(8px);
+      position:relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,.02),
+        rgba(255,255,255,.02) 1px,
+        rgba(0,0,0,0) 3px,
+        rgba(0,0,0,0) 6px
+      );
+      opacity:.12; pointer-events:none; mix-blend-mode:overlay;
+    }
+
+    h1{ margin:0 0 8px; letter-spacing:.8px; }
+    .sub{ margin:0 0 12px; color:var(--mut); line-height:1.35; }
+    .whisper{
+      margin:8px 0 12px;
+      border-left:2px solid rgba(255,46,46,.35);
+      padding-left:10px;
+      color:#d7d7de;
+      min-height:22px;
+    }
+    .whisper span{ color:#ffb3b3; }
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap; margin:12px 0; align-items:center; }
+    button, input{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#0b0b12;
+      color:var(--fg);
+      cursor:pointer;
+    }
+    button:hover, input:hover{ border-color:#2b2b39; }
+    button.danger:hover{ border-color: rgba(255,46,46,.85); }
+
+    textarea{
+      width:100%;
+      min-height:340px;
+      background:#06060b;
+      color:#f1f1f1;
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:14px;
+      line-height:1.55;
+      resize:vertical;
+    }
+
+    .tiny{ font-size:12px; color:var(--mut); margin-top:10px; }
+
+    .msg{
+      position:fixed; right:16px; bottom:16px;
+      max-width:360px;
+      border:1px solid var(--line);
+      background: rgba(7,7,10,.82);
+      border-radius:14px;
+      padding:12px;
+      box-shadow:0 18px 60px rgba(0,0,0,.75);
+      transform: translateY(26px);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .25s ease, transform .25s ease;
+      backdrop-filter: blur(10px);
+    }
+    .msg.show{ opacity:1; transform: translateY(0); }
+    .msg .head{ color:#ffb3b3; font-size:12px; letter-spacing:.6px; opacity:.95; }
+    .msg .body{ margin-top:6px; font-size:13px; color:#d9d9e0; line-height:1.35; }
+
+    @media (prefers-reduced-motion: reduce){
+      *{ animation:none !important; transition:none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <h1>Horror Generator 👁️</h1>
+    <p class="sub">Génère • Écoute • Recommence. (Son optionnel, mais conseillé.)</p>
+
+    <div class="whisper" id="whisper">— …</div>
+
+    <div class="row">
+      <input id="hero" placeholder="Nom du personnage (optionnel)" />
+      <button id="gen" class="danger">Générer 😈</button>
+      <button id="speak">Lire 🤖</button>
+      <button id="stop">Stop 🛑</button>
+      <button id="copy">Copier 📋</button>
+    </div>
+
+    <div class="row">
+      <button id="ambianceOn">Ambiance 🎧</button>
+      <button id="ambianceOff">Couper 🔇</button>
+    </div>
+
+    <textarea id="out" readonly></textarea>
+
+    <div class="tiny">Astuce : si le son ne marche pas, clique d’abord un bouton (bloqueur navigateur).</div>
+  </div>
+
+  <div class="msg" id="msg">
+    <div class="head">ARCHIVES</div>
+    <div class="body" id="msgBody">…</div>
+  </div>
+
+  <script src="story.js"></script>
+  <script src="voice.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
