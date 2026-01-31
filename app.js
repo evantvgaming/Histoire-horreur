@@ -120,3 +120,15 @@ function stopAmbiance(){
 
 onBtn.onclick = startAmbiance;
 offBtn.onclick = stopAmbiance;
+
+setInterval(() => {
+  const out = document.getElementById("out");
+  if (!out || !out.value) return;
+
+  if (Math.random() < 0.15) {
+    out.value = out.value.replace(
+      /(.)/,
+      (m) => Math.random() < 0.5 ? m.toUpperCase() : m
+    );
+  }
+}, 8000);
